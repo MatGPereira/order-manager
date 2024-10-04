@@ -1,5 +1,13 @@
 <script setup lang="ts">
+import { useLoginStore } from '@/stores/login';
+
 import background from '../../../assets/images/login/background.jpg';
+
+const loginStore = useLoginStore();
+
+async function handleSubmit(): Promise<void> {
+  await loginStore.login();
+}
 </script>
 
 <template>
@@ -14,7 +22,11 @@ import background from '../../../assets/images/login/background.jpg';
       </figure>
       <div class="p-8">
         <h1 class="text-2xl text-center mb-12">Login</h1>
-        <form class="flex flex-col gap-y-8 min-w-96">
+        <form
+          @submit.prevent="handleSubmit"
+          class="flex flex-col gap-y-8 min-w-96"
+          name="login-form"
+        >
           <fieldset class="flex flex-col items-start">
             <label
               for="email"
@@ -26,6 +38,7 @@ import background from '../../../assets/images/login/background.jpg';
               <input
                 placeholder="email@dominio.com"
                 name="email"
+                v-model="loginStore.currentUser.email"
                 required
                 minlength="6"
                 type="email"
@@ -44,6 +57,7 @@ import background from '../../../assets/images/login/background.jpg';
               <input
                 placeholder="******"
                 name="password"
+                v-model="loginStore.currentUser.password"
                 required
                 minlength="6"
                 type="password"
